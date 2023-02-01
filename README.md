@@ -1,2 +1,2 @@
-# cosmos-alerts
-A solution to have Azure Monitor alerts triggered from Cosmos SQL queries
+# Create Azure Monitor Alerts from Cosmos SQL queries
+[https://techcommunity.microsoft.com/t5/fasttrack-for-azure/creating-azure-monitor-alerts-for-cosmos-and-other-databases/ba-p/3730798](https://techcommunity.microsoft.com/t5/fasttrack-for-azure/creating-azure-monitor-alerts-for-cosmos-and-other-databases/ba-p/3730798)

@@ -1,0 +1,66 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "Terminate": {
+                        "inputs": {
+                            "runError": {
+                                "code": "500",
+                                "message": "There are failed orders in database:\n@{body('Query_items')?['items']}"
+                            },
+                            "runStatus": "Failed"
+                        },
+                        "runAfter": {},
+                        "type": "Terminate"
+                    }
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "greaterOrEquals": [
+                                "@outputs('Query_items')?['body']?['count']",
+                                1
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Query_items": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "If"
+            },
+            "Query_items": {
+                "inputs": {
+                    "parameters": {
+                        "containerId": "orders",
+                        "databaseId": "orders-db",
+                        "queryText": "SELECT * FROM orders WHERE orders.status = 'failed'"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureCosmosDB",
+                        "operationId": "QueryDocuments",
+                        "serviceProviderId": "/serviceProviders/AzureCosmosDB"
+                    }
+                },
+                "runAfter": {},
+                "type": "ServiceProvider"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "Recurrence": {
+                "recurrence": {
+                    "frequency": "Minute",
+                    "interval": 1
+                },
+                "type": "Recurrence"
+            }
+        }
+    },
+    "kind": "Stateful"
+}
